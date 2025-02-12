@@ -43,7 +43,7 @@ export default function LoginPage() {
       }
 
       handleAuthChange()
-      router.push('/policys')
+      router.push('/tasks')
     } catch (err) {
       console.error(err)
       setError(err.message)

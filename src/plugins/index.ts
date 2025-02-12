@@ -17,7 +17,7 @@ import { DatePicker } from '@/fields/date-picker'
 import { isAdmin } from '@/access/isAdmin'
 import { authenticated } from '@/access/authenticated'
 import { isAdminField } from '@/access/isAdminField'
-import { addCustomerToForm } from '@/hooks/addCustomerIdToForm'
+import { addMemberToForm } from '@/hooks/addMemberIdToForm'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
@@ -76,20 +76,20 @@ export const plugins: Plugin[] = [
         create: authenticated,
       },
       hooks: {
-        beforeValidate: [addCustomerToForm(process.env.CUSTOMER_ID_APPEND_FORMS.split(','))],
+        beforeValidate: [addMemberToForm(process.env.MEMBER_ID_APPEND_FORMS.split(','))],
       },
       fields: ({ defaultFields }) => {
         return [
           ...defaultFields,
           {
             type: 'relationship',
-            name: 'customer',
+            name: 'member',
             access: {
               read: isAdminField,
               update: isAdminField,
               create: isAdminField,
             },
-            label: 'Customer',
+            label: 'Member',
             relationTo: 'users',
             admin: {
               readOnly: true,

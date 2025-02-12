@@ -21,7 +21,7 @@ export default function RegisterPage() {
       email: '',
       password: '',
       name: '',
-      role: 'customer',
+      role: 'shareholder',
     },
   })
 
@@ -60,7 +60,7 @@ export default function RegisterPage() {
         {error && <div className="bg-red-100 text-red-700 p-3 rounded-md my-3">{error}</div>}
         <div className="space-y-2 text-center">
           <h1 className="font-bold text-3xl">Register</h1>
-          <p className="text-muted-foreground text-lg">Register as a customer</p>
+          <p className="text-muted-foreground text-lg">Register as a member</p>
         </div>
         <form onSubmit={form.handleSubmit(handleLogin)} className="mt-5 space-y-3">
           <Input type="text" placeholder="Name" autoComplete="name" {...form.register('name')} />

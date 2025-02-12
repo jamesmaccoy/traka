@@ -13,7 +13,7 @@ declare global {
       R2_SECRET_ACCESS_KEY: string
       R2_ENDPOINT: string
 
-      CUSTOMER_ID_APPEND_FORMS: string
+      MEMBER_ID_APPEND_FORMS: string
     }
   }
 }
