@@ -76,7 +76,11 @@ export const plugins: Plugin[] = [
         create: authenticated,
       },
       hooks: {
-        beforeValidate: [addMemberToForm(process.env.MEMBER_ID_APPEND_FORMS.split(','))],
+        beforeValidate: [
+          addMemberToForm(
+            process.env.MEMBER_ID_APPEND_FORMS ? process.env.MEMBER_ID_APPEND_FORMS.split(',') : [],
+          ),
+        ],
       },
       fields: ({ defaultFields }) => {
         return [
