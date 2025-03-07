@@ -4,62 +4,62 @@ import React from 'react'
 import { Post, User } from '@/payload-types'
 import { getMeUser } from '@/utilities/getMeUser'
 import PageClient from './page.client'
-import PolicysCard from '../../../components/Policys/PolicysCard'
+import TasksCard from '../../../components/Tasks/TasksCard'
 import { redirect } from 'next/navigation'
 
-export default async function Policys() {
+export default async function Tasks() {
   const currentUser = await getMeUser()
 
   if (!currentUser) {
     redirect('/login')
   }
 
-  const [upcomingPolicys, pastPolicys] = await Promise.all([
-    getPolicys('upcoming', currentUser.user),
-    getPolicys('past', currentUser.user),
+  const [upcomingTasks, pastTasks] = await Promise.all([
+    getTasks('upcoming', currentUser.user),
+    getTasks('past', currentUser.user),
   ])
 
-  const formattedUpcomingPolicys = upcomingPolicys.docs.map((policy) => ({
-    ...(policy.post as Pick<Post, 'meta' | 'slug' | 'title'>),
-    fromDate: policy.fromDate,
-    toDate: policy.toDate,
-    guests: policy.guests,
-    id: policy.id,
+  const formattedUpcomingTasks = upcomingTasks.docs.map((task) => ({
+    ...(task.post as Pick<Post, 'meta' | 'slug' | 'title'>),
+    fromDate: task.fromDate,
+    toDate: task.toDate,
+    member: task.member,
+    id: task.id,
   }))
 
-  const formattedPastPolicys = pastPolicys.docs.map((policy) => ({
-    ...(policy.post as Pick<Post, 'meta' | 'slug' | 'title'>),
-    fromDate: policy.fromDate,
-    toDate: policy.toDate,
-    guests: policy.guests,
-    id: policy.id,
+  const formattedPastTasks = pastTasks.docs.map((task) => ({
+    ...(task.post as Pick<Post, 'meta' | 'slug' | 'title'>),
+    fromDate: task.fromDate,
+    toDate: task.toDate,
+    member: task.member,
+    id: task.id,
   }))
 
-  console.log(upcomingPolicys, pastPolicys)
+  console.log(upcomingTasks, pastTasks)
 
   return (
     <>
       <PageClient />
       <div className="my-10 container space-y-10">
         <div>
-          {upcomingPolicys.docs.length > 0 && (
+          {upcomingTasks.docs.length > 0 && (
             <h2 className="text-4xl font-medium tracking-tighter my-6">Active</h2>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-            {formattedUpcomingPolicys.map((policy) => (
-              <PolicysCard key={policy.id} policy={policy} />
+            {formattedUpcomingTasks.map((task) => (
+              <TasksCard key={task.id} task={task} />
             ))}
           </div>
         </div>
 
-        {pastPolicys.docs.length > 0 && (
+        {pastTasks.docs.length > 0 && (
           <h2 className="text-4xl font-medium tracking-tighter my-6">Past</h2>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-          {formattedPastPolicys.map((policy) => (
-            <PolicysCard key={policy.id} policy={policy} />
+          {formattedPastTasks.map((task) => (
+            <TasksCard key={task.id} task={task} />
           ))}
         </div>
       </div>
@@ -67,7 +67,7 @@ export default async function Policys() {
   )
 }
 
-const getPolicys = async (type: 'upcoming' | 'past', currentUser: User) => {
+const getTasks = async (type: 'upcoming' | 'past', currentUser: User) => {
   const payload = await getPayload({ config })
 
   let whereQuery: Where
@@ -81,7 +81,7 @@ const getPolicys = async (type: 'upcoming' | 'past', currentUser: User) => {
           },
         },
         {
-          assured: {
+          shareholder: {
             equals: currentUser.id,
           },
         },
@@ -96,7 +96,7 @@ const getPolicys = async (type: 'upcoming' | 'past', currentUser: User) => {
           },
         },
         {
-          assured: {
+          shareholder: {
             equals: currentUser.id,
           },
         },
@@ -104,8 +104,8 @@ const getPolicys = async (type: 'upcoming' | 'past', currentUser: User) => {
     }
   }
 
-  const Policys = await payload.find({
-    collection: 'policys',
+  const Tasks = await payload.find({
+    collection: 'tasks',
     limit: 100,
     where: whereQuery,
     depth: 2,
@@ -113,11 +113,11 @@ const getPolicys = async (type: 'upcoming' | 'past', currentUser: User) => {
     select: {
       slug: true,
       post: true,
-      guests: true,
+      member: true,
       fromDate: true,
       toDate: true,
     },
   })
 
-  return Policys
+  return Tasks
 }

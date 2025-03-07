@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useSubscription } from '@/hooks/useSubscription'
 
 type FormValues = {
   email: string
@@ -22,7 +23,7 @@ export default function LoginPage() {
   })
 
   const router = useRouter()
-
+  const { isSubscribed, isLoading: isSubscriptionLoading } = useSubscription()
   const [error, setError] = React.useState<string | null>(null)
 
   const { handleAuthChange } = useUserContext()
@@ -43,7 +44,12 @@ export default function LoginPage() {
       }
 
       handleAuthChange()
-      router.push('/policys')
+      // After successful login, check subscription status
+      if (!isSubscribed && !isSubscriptionLoading) {
+        router.push('/subscribe')
+      } else {
+        router.push('/tasks')
+      }
     } catch (err) {
       console.error(err)
       setError(err.message)
@@ -56,7 +62,7 @@ export default function LoginPage() {
         {error && <div className="bg-red-100 text-red-700 p-3 rounded-md my-3">{error}</div>}
         <div className="space-y-2 text-center">
           <h1 className="font-bold text-3xl">Login</h1>
-          <p className="text-muted-foreground text-lg">Login as a customer</p>
+          <p className="text-muted-foreground text-lg">Login as a member</p>
         </div>
         <form onSubmit={form.handleSubmit(handleLogin)} className="mt-5 space-y-3">
           <Input

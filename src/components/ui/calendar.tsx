@@ -46,13 +46,25 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         day_hidden: 'invisible',
         ...classNames,
       }}
-      components={{
-        IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn('h-4 w-4', className)} {...props} />
-        ),
-        IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn('h-4 w-4', className)} {...props} />
-        ),
+      modifiersClassNames={{
+        today: 'bg-accent text-accent-foreground',
+        selected: 'bg-primary text-primary-foreground',
+      }}
+      styles={{
+        nav_button_previous: {
+          backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>')`,
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          width: '24px',
+          height: '24px',
+        },
+        nav_button_next: {
+          backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>')`,
+          backgroundSize: 'contain',
+          backgroundRepeat: 'no-repeat',
+          width: '24px',
+          height: '24px',
+        },
       }}
       {...props}
     />

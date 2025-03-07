@@ -1,12 +1,12 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminOrCreateRoleCustomer } from './access/adminOrCreateRoleCustomer'
+import { adminOrCreateRoleMember } from './access/adminOrCreateRoleMember'
 import { isAdmin } from '@/access/isAdmin'
 import { adminOrSelf } from '@/access/adminOrSelf'
 import { validateRole } from './hooks/validateRole'
 import { adminSelfOrAdded } from './access/adminSelfOrAdded'
 import { fillAddedByField } from './hooks/fillAddedByField'
-import { adminSelfOrGuest } from './access/adminSelfOrGuest'
+import { adminSelfOrMember } from './access/adminSelfOrMember'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -15,10 +15,10 @@ export const Users: CollectionConfig = {
   },
   access: {
     admin: ({ req: { user } }) => Boolean(user),
-    create: adminOrCreateRoleCustomer,
+    create: adminOrCreateRoleMember,
     delete: isAdmin,
     unlock: isAdmin,
-    read: adminSelfOrGuest,
+    read: adminSelfOrMember,
     update: adminOrSelf('id'),
   },
   admin: {
@@ -40,11 +40,11 @@ export const Users: CollectionConfig = {
       type: 'select',
       options: [
         { label: 'Admin', value: 'admin' },
-        { label: 'Assured', value: 'assure' },
-        { label: 'Beneficiary', value: 'beneficiary' },
+        { label: 'Shareholder', value: 'shareholder' },
+        { label: 'Member', value: 'member' },
       ],
       hasMany: true,
-      defaultValue: ['beneficiary'],
+      defaultValue: ['member'],
     },
     {
       name: 'addedBy',

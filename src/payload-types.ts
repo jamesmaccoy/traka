@@ -11,7 +11,7 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
-    policys: Policy;
+    tasks: Task;
     pages: Page;
     posts: Post;
     media: Media;
@@ -27,7 +27,7 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    policys: PolicysSelect<false> | PolicysSelect<true>;
+    tasks: TasksSelect<false> | TasksSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -81,13 +81,13 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "policys".
+ * via the `definition` "tasks".
  */
-export interface Policy {
+export interface Task {
   id: string;
   title: string;
-  assured?: (string | null) | User;
-  beneficiary?: (string | User)[] | null;
+  shareholder?: (string | null) | User;
+  member?: (string | User)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   post: string | Post;
@@ -104,7 +104,7 @@ export interface Policy {
 export interface User {
   id: string;
   name?: string | null;
-  role?: ('admin' | 'assure' | 'beneficiary')[] | null;
+  role?: ('admin' | 'shareholder' | 'member')[] | null;
   addedBy?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
@@ -737,7 +737,7 @@ export interface FormSubmission {
         id?: string | null;
       }[]
     | null;
-  customer?: (string | null) | User;
+  shareholder?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -779,8 +779,8 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'policys';
-        value: string | Policy;
+        relationTo: 'tasks';
+        value: string | Task;
       } | null)
     | ({
         relationTo: 'pages';
@@ -862,12 +862,12 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "policys_select".
+ * via the `definition` "tasks_select".
  */
-export interface PolicysSelect<T extends boolean = true> {
+export interface TasksSelect<T extends boolean = true> {
   title?: T;
-  assured?: T;
-  beneficiary?: T;
+  shareholder?: T;
+  member?: T;
   slug?: T;
   slugLock?: T;
   post?: T;
@@ -1346,7 +1346,7 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
         value?: T;
         id?: T;
       };
-  customer?: T;
+  shareholder?: T;
   updatedAt?: T;
   createdAt?: T;
 }

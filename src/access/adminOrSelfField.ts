@@ -9,7 +9,7 @@ export const adminOrSelfField =
       return true
     }
 
-    if (!user.role?.includes('customer')) {
+    if (!user.role?.includes('shareholder')) {
       return false
     }
 

@@ -4,23 +4,23 @@ import { isAdmin } from '@/access/isAdmin'
 import { isAdminField } from '@/access/isAdminField'
 import { slugField } from '@/fields/slug'
 import { CollectionConfig } from 'payload'
-import { adminOrSelfOrGuests } from './access/adminOrSelfOrGuests'
+import { adminOrSelfOrMembers } from './access/adminOrSelfOrMembers'
 
-export const Policy: CollectionConfig = {
-  slug: 'policys',
+export const Task: CollectionConfig = {
+  slug: 'tasks',
   labels: {
-    singular: 'Policy',
-    plural: 'Policys',
+    singular: 'Task',
+    plural: 'Tasks',
   },
   typescript: {
-    interface: 'Policy',
+    interface: 'Task',
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'fromDate', 'toDate', 'slug', 'customer'],
+    defaultColumns: ['title', 'fromDate', 'toDate', 'slug', 'member'],
   },
   access: {
-    read: adminOrSelfOrGuests('assured', 'beneficiary'),
+    read: adminOrSelfOrMembers('shareholder', 'member'),
     create: isAdmin,
     delete: isAdmin,
   },
@@ -35,12 +35,12 @@ export const Policy: CollectionConfig = {
       },
     },
     {
-      name: 'assured',
+      name: 'shareholder',
       type: 'relationship',
       relationTo: 'users',
       filterOptions: {
         role: {
-          equals: 'assured',
+          equals: 'shareholder',
         },
       },
       access: {
@@ -48,12 +48,12 @@ export const Policy: CollectionConfig = {
       },
     },
     {
-      name: 'beneficiary',
+      name: 'member',
       type: 'relationship',
       hasMany: true,
       relationTo: 'users',
       access: {
-        update: adminOrSelfField('assured'),
+        update: adminOrSelfField('shareholder'),
       },
       admin: {
         isSortable: true,
